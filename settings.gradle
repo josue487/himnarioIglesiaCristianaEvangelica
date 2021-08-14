@@ -1,0 +1,2 @@
+rootProject.name = "Himnario Iglesia Cristiana Evangelica"
+include ':app'
