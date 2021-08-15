@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".BusquedaActivity">
+    tools:context=".Actividades.BusquedaActivity">
 
     <TextView
         android:id="@+id/lblTitulo"
@@ -48,4 +48,18 @@
         app:layout_constraintEnd_toStartOf="@+id/lblTitulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblVersiculos"
+        android:layout_width="224dp"
+        android:layout_height="17dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Versiculos"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/lblCancion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTitulo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

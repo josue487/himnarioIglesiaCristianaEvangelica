@@ -1,4 +1,4 @@
-package com.ice.himnarioiglesiacristianaevangelica
+package com.ice.himnarioiglesiacristianaevangelica.Actividades
 
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import android.text.Spanned
 import android.text.method.ScrollingMovementMethod
 import android.text.style.StyleSpan
 import android.view.View
-import android.widget.Toast
 import com.ice.himnarioiglesiacristianaevangelica.databinding.ActivityBusquedaBinding
 
 class BusquedaActivity : AppCompatActivity() {
@@ -17,15 +16,15 @@ class BusquedaActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBusquedaBinding
 
     //Contenido del himno promedio (ToDo Base de datos con estos atributos)
-    var id:Int = 1;
-    var titulo:String="A casa vete y cuenta allí"
-    var cancion:String="A casa vete y cuenta allí / que Cristo te libró; / que tus amigos vean en ti /" +
+    val id:Int = 1;
+    val titulo:String = "A casa vete y cuenta allí"
+    val cancion:String ="A casa vete y cuenta allí / que Cristo te libró; / que tus amigos vean en ti /" +
             " lo que Él por gracia obró. //* A casa vete y cuenta allí / que Cristo comprendió / " +
-            "tu gran necesidad, y así / su sangre derramó. /+ Ve, cuenta a los de en derredor / " +
-            "que Él satisfará / sus almas, puesto que en su amor / la cruz sufrido ha. /+ Ve, cuenta a " +
-            "los de más allá / que en Cristo hay perdón, / y que Él a todos salvará, / si quieren salvación. /+ "
-    var coro : String="(negrita)A casa vete y lo que en ti / Ha hecho Dios, que vean, / y puede ser que los de allí / lo buscarán también. (finNegrita)//"
-
+            "tu gran necesidad, y así / su sangre derramó. //+ Ve, cuenta a los de en derredor / " +
+            "que Él satisfará / sus almas, puesto que en su amor / la cruz sufrido ha. //+ Ve, cuenta a " +
+            "los de más allá / que en Cristo hay perdón, / y que Él a todos salvará, / si quieren salvación. //+ "
+    val coro : String = "(negrita)A casa vete y lo que en ti / Ha hecho Dios, que vean, / y puede ser que los de allí / lo buscarán también. (finNegrita)//"
+    val versiculos : String = "Marcos 5.19  Hechos 10.42,43"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,12 +52,25 @@ fun cargarHimno(){
     var tituloFinal:String = "$id $titulo";
     //Agregado de separadores de linea al reemplazarlos del texto original (variable reservada para eso '/') en la cancion
     var cancionFinal:String = cancion.replace("/", System.getProperty("line.separator"))
-    //Variable situacional '+' para evaluar a futuro la posibilidad de poner el coro en distintas lineas de la cancion donde esta lo amerite
-    cancionFinal = cancionFinal.replace("+", System.getProperty("line.separator"))
     //Agregado de separadores de linea al reemplazarlos del texto original (variable reservada para eso '/') en el coro
     var coroFinal:String = coro.replace("/", System.getProperty("line.separator"))
+
     //agregado del coro a la cancion para obtener la cancion final
     cancionFinal=cancionFinal.replace("*", coroFinal)
+
+    //ToDO evaluacion de configuraciones para determinar si quiere ver que el coro se repita o no
+    if(true){
+        //Variable situacional '+' para evaluar a futuro la posibilidad de poner el coro en distintas lineas de la cancion donde esta lo amerite
+        cancionFinal = cancionFinal.replace("+", "")
+    }else{
+        cancionFinal = cancionFinal.replace("+", coroFinal)
+    }
+
+
+
+
+
+
 
     //bloque de codigo que lo que hace es:
     //1) obtener el indice de inicio de coro para despues poner en negrita y guardarlo en una variable
@@ -82,6 +94,8 @@ fun cargarHimno(){
     binding.lblTitulo.text=tituloFinal
     //bindeo con la vista para mostrar la cancion completa y formateada
     binding.lblCancion.text=ss
+    //bindeo con la vista para mostrar los versiculos basados en la creacion del himno
+    binding.lblVersiculos.text=versiculos
 
 }
 
