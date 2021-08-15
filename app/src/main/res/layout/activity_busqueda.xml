@@ -5,7 +5,7 @@
     android:id="@+id/viewBusqueda"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_launcher_foreground"
+    android:background="@drawable/background"
     tools:context=".BusquedaActivity">
 
     <TextView

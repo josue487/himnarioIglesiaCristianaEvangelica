@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_launcher_foreground"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <TextView
@@ -24,17 +24,16 @@
 
     <EditText
         android:id="@+id/txtNumeroHimno"
-        android:layout_width="195dp"
-        android:layout_height="55dp"
+        android:layout_width="234dp"
+        android:layout_height="52dp"
+        android:autoSizeTextType="uniform"
         android:background="#C4FFD53B"
         android:ems="10"
         android:fontFamily="sans-serif-smallcaps"
-        android:hint="Ingrese numero de Himno"
+        android:hint="Ingrese Numero de Himno"
         android:inputType="number"
-        android:text="115"
         android:textAlignment="center"
         android:textColor="#FDFDFD"
-        android:textSize="38sp"
         android:textStyle="italic"
         android:typeface="sans"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,8 +44,8 @@
 
     <Button
         android:id="@+id/btnBuscar"
-        android:layout_width="192dp"
-        android:layout_height="62dp"
+        android:layout_width="186dp"
+        android:layout_height="59dp"
         android:background="#C9F60909"
         android:backgroundTint="#27E3FB"
         android:fontFamily="sans-serif-medium"
@@ -54,7 +53,7 @@
         android:text="Buscar"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="22sp"
+        android:textSize="20sp"
         app:icon="@android:drawable/ic_search_category_default"
         app:iconPadding="5sp"
         app:layout_constraintBottom_toBottomOf="parent"

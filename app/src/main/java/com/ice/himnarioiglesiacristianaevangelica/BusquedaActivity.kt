@@ -40,6 +40,7 @@ class BusquedaActivity : AppCompatActivity() {
         cargarHimno()
     }
 
+    //Codigo para boton atras
     fun atras(v : View){
         onBackPressed()
     }
@@ -75,6 +76,7 @@ fun cargarHimno(){
     val negrita = StyleSpan(Typeface.BOLD_ITALIC)
     //formateo del texto final con el coro en negrita delimitado por inicioCoro y finalCoro
     ss.setSpan(negrita,inicioCoro,finalCoro,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
 
     //bindeo con la vista para mostrar titulo con el id y el titulo del himnario
     binding.lblTitulo.text=tituloFinal
