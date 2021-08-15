@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding= ActivityMainBinding.inflate(layoutInflater)
         //seteo del content view
         setContentView(binding.root)
+
     }
 
 

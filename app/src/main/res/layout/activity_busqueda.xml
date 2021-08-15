@@ -24,9 +24,10 @@
 
     <TextView
         android:id="@+id/lblCancion"
-        android:layout_width="333dp"
-        android:layout_height="549dp"
+        android:layout_width="330dp"
+        android:layout_height="572dp"
         android:background="#B0F3EDED"
+        android:scrollbars="vertical"
         android:text="Canción"
         android:textAlignment="center"
         android:textSize="25sp"
@@ -35,4 +36,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.609" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="56dp"
+        android:layout_height="46dp"
+        android:background="@color/design_default_color_secondary"
+        android:onClick="atras"
+        app:icon="@drawable/abc_vector_test"
+        app:layout_constraintBottom_toTopOf="@+id/lblCancion"
+        app:layout_constraintEnd_toStartOf="@+id/lblTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
