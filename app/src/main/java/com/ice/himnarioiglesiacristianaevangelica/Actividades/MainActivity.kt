@@ -20,29 +20,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         //seteo del content view
         setContentView(binding.root)
-
         copiarBaseDatos()
 
     }
 
     fun btnBuscar(v: View) {
         if (binding.txtNumeroHimno.text.isNotEmpty()) {
-            val intent = Intent(this, BusquedaActivity::class.java)
+            var intent = Intent(this, BusquedaActivity::class.java)
+            intent.putExtra("id",binding.txtNumeroHimno.text.toString().toInt())
             startActivity(intent)
         } else {
             Toast.makeText(this, "Debe Ingresar un himno valido", Toast.LENGTH_SHORT).show()
         }
     }
 
+
     fun copiarBaseDatos() {
-        val ruta: String = "/data/data/com.example.sqlite/databases/";
+        val ruta: String = "/data/data/com.ice.himnarioiglesiacristianaevangelica/databases/";
         val archivo: String = "dbHimnosEstructuraCompleta.db";
         val archivoDB: File = File(ruta + archivo);
         if (!archivoDB.exists()) {
             try {
-                val IS: InputStream = getApplicationContext().getAssets().open(archivo);
-                val OS: OutputStream = FileOutputStream(archivoDB)
-                val buffer: ByteArray = ByteArray(1024)
+                var IS: InputStream = getApplicationContext().getAssets().open(archivo);
+                var OS: OutputStream = FileOutputStream(archivoDB)
+                var buffer: ByteArray = ByteArray(1024)
                 var length : Int = 0;
                 length = IS.read(buffer)
                 while (length > 0) {
