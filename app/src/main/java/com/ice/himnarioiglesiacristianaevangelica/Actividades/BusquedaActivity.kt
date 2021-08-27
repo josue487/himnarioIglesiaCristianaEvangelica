@@ -22,16 +22,11 @@ class BusquedaActivity : AppCompatActivity() {
     //Necesario para trabajar con viewbinding
     private lateinit var binding : ActivityBusquedaBinding
 
-    //Contenido del himno promedio (ToDo Base de datos con estos atributos)
-//    val id:Int = 1;
-//    val titulo:String = "A casa vete y cuenta allí"
-//    val cancion:String ="A casa vete y cuenta allí / que Cristo te libró; / que tus amigos vean en ti /" +
-//            " lo que Él por gracia obró. //* A casa vete y cuenta allí / que Cristo comprendió / " +
-//            "tu gran necesidad, y así / su sangre derramó. //+ Ve, cuenta a los de en derredor / " +
-//            "que Él satisfará / sus almas, puesto que en su amor / la cruz sufrido ha. //+ Ve, cuenta a " +
-//            "los de más allá / que en Cristo hay perdón, / y que Él a todos salvará, / si quieren salvación. //+ "
-//    val coro : String = "(negrita)A casa vete y lo que en ti / Ha hecho Dios, que vean, / y puede ser que los de allí / lo buscarán también. (finNegrita)//"
-//    val versiculos : String = "Marcos 5.19  Hechos 10.42,43"
+    //Comentario Formato de la Base de Datos para trabajar
+    // Simbolos
+    // / significa salto de linea
+    // * significa que en este lugar va el coro si o si
+    // + Significa que en este lugar va el coro opcionalmente como para que aparezca en multiples ocaciones
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,18 +43,18 @@ class BusquedaActivity : AppCompatActivity() {
     }
 
     //Codigo para boton atras
-    fun atras(v : View){
+    fun atras(@Suppress("UNUSED_PARAMETER") v : View){
         onBackPressed()
     }
 
 
     fun formatearYCargarHimno (himnoBuscado : Himno){
         //Creacion de titulo con su id
-        var tituloFinal:String = himnoBuscado.id.toString() + " " + himnoBuscado.titulo
+        val tituloFinal:String = himnoBuscado.id.toString() + " " + himnoBuscado.titulo
         //Agregado de separadores de linea al reemplazarlos del texto original (variable reservada para eso '/') en la cancion
         var cancionFinal:String = himnoBuscado.cancion.replace("/", System.getProperty("line.separator"))
         //Agregado de separadores de linea al reemplazarlos del texto original (variable reservada para eso '/') en el coro
-        var coroFinal:String = himnoBuscado.coro.replace("/", System.getProperty("line.separator"))
+        val coroFinal:String = himnoBuscado.coro.replace("/", System.getProperty("line.separator"))
 
         //agregado del coro a la cancion para obtener la cancion final
         cancionFinal=cancionFinal.replace("*", coroFinal)
@@ -93,6 +88,7 @@ class BusquedaActivity : AppCompatActivity() {
         // creacion del estilo negrita
         val negrita = StyleSpan(Typeface.BOLD_ITALIC)
         //formateo del texto final con el coro en negrita delimitado por inicioCoro y finalCoro
+
         ss.setSpan(negrita,inicioCoro,finalCoro,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         //bindeo con la vista para mostrar titulo con el id y el titulo del himnario
         binding.lblTitulo.text=tituloFinal

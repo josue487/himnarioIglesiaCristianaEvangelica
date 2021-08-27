@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Himnario Iglesia Cristiana Evangelica</string>
+    <string name="titulo">Titulo</string>
+    <string name="canci_n">Canción</string>
+    <string name="versiculos">Versiculos</string>
+    <string name="himnario_i_c_e">Himnario I.C.E</string>
+    <string name="ingrese_numero_de_himno">Ingrese Numero de Himno</string>
+    <string name="buscar">Buscar</string>
+    <string name="logo">Logo</string>
 </resources>

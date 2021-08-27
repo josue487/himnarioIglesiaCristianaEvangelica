@@ -11,7 +11,7 @@
         android:id="@+id/lblBusqueda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Himnario I.C.E"
+        android:text="@string/himnario_i_c_e"
         android:textAlignment="center"
         android:textColor="#F4F1F1"
         android:textSize="35sp"
@@ -30,17 +30,21 @@
         android:background="#C4FFD53B"
         android:ems="10"
         android:fontFamily="sans-serif-smallcaps"
-        android:hint="Ingrese Numero de Himno"
+        android:hint="@string/ingrese_numero_de_himno"
         android:inputType="number"
         android:textAlignment="center"
         android:textColor="#FDFDFD"
         android:textStyle="italic"
         android:typeface="sans"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnBuscar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblBusqueda"
         app:layout_constraintTop_toTopOf="@+id/lblBusqueda"
-        app:layout_constraintVertical_bias="0.182" />
+        app:layout_constraintVertical_bias="0.641"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/btnBuscar"
@@ -50,7 +54,7 @@
         android:backgroundTint="#27E3FB"
         android:fontFamily="sans-serif-medium"
         android:onClick="btnBuscar"
-        android:text="Buscar"
+        android:text="@string/buscar"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -64,11 +68,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="232dp"
-        android:layout_height="277dp"
+        android:layout_width="291dp"
+        android:layout_height="271dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/icono_en_app_01" />
+        app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
+        app:srcCompat="@drawable/icono_en_menu_principal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

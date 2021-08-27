@@ -7,5 +7,7 @@ class Himno {
     var coro : String = ""
     var notas : String = ""
     var versiculo : String = ""
+    var favorito : Boolean = false
+    var notasCoro : String = ""
 
 }
