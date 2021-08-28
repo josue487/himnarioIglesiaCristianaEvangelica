@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ice.himnarioiglesiacristianaevangelica.ClasesBase.Himno
+import com.ice.himnarioiglesiacristianaevangelica.R
 import com.ice.himnarioiglesiacristianaevangelica.Service.SQLiteHelper
 import com.ice.himnarioiglesiacristianaevangelica.databinding.ActivityBusquedaBinding
 
@@ -28,6 +29,8 @@ class BusquedaActivity : AppCompatActivity() {
     // * significa que en este lugar va el coro si o si
     // + Significa que en este lugar va el coro opcionalmente como para que aparezca en multiples ocaciones
 
+
+    var posicion : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +50,27 @@ class BusquedaActivity : AppCompatActivity() {
         onBackPressed()
     }
 
+    //Codigo para boton atras
+    fun siguiente(@Suppress("UNUSED_PARAMETER") v : View){
+        if(posicion+1 != 518){
+            cargarHimno(posicion+1)
+        }
+        else{
+            Toast.makeText(this,"Llegaste al Final",Toast.LENGTH_LONG)
+        }
+    }
 
+    //Codigo para boton atras
+    fun anterior(@Suppress("UNUSED_PARAMETER") v : View){
+        if(posicion-1 != 0){
+            cargarHimno(posicion-1)
+        }
+        else{
+            Toast.makeText(this,"Llegaste al Inicio",Toast.LENGTH_LONG)
+        }
+    }
+
+    //Formatea el texto ejm los espacios determinados con / el coro determinado con * y el coro repetido determinado por +
     fun formatearYCargarHimno (himnoBuscado : Himno){
         //Creacion de titulo con su id
         val tituloFinal:String = himnoBuscado.id.toString() + " " + himnoBuscado.titulo
@@ -76,9 +99,9 @@ class BusquedaActivity : AppCompatActivity() {
         //4) quitar el texto reservado (finNegrita) que identificaba el fin del coro
         cancionFinal=cancionFinal.replace("(finNegrita)", "")
 
+
+        //Una vez formateado lo carga en la vista de acuerdo al formato aplicado
        cargarEnLaVista(cancionFinal, inicioCoro, finalCoro, tituloFinal, himnoBuscado.versiculo)
-
-
     }
 
 
@@ -88,7 +111,6 @@ class BusquedaActivity : AppCompatActivity() {
         // creacion del estilo negrita
         val negrita = StyleSpan(Typeface.BOLD_ITALIC)
         //formateo del texto final con el coro en negrita delimitado por inicioCoro y finalCoro
-
         ss.setSpan(negrita,inicioCoro,finalCoro,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         //bindeo con la vista para mostrar titulo con el id y el titulo del himnario
         binding.lblTitulo.text=tituloFinal
@@ -99,12 +121,27 @@ class BusquedaActivity : AppCompatActivity() {
 
     }
 
+    //Boton de favorito
+    fun formatearFavorito(himnoFavorito : Boolean){
+        if(himnoFavorito)
+        {
+            binding.btnFavorito.setImageResource(R.drawable.favorito_on)
+        }
+        else{
+            binding.btnFavorito.setImageResource(R.drawable.favorito_off)
+        }
+    }
+
+    fun btnFavorito(v: View){
+        formatearFavorito(servicioBD.cambiarEstadoFavorito(posicion))
+    }
 
 fun cargarHimno(idHimno : Int){
 
+    posicion=idHimno
     val himnoBuscado : Himno = servicioBD.buscarHimno(idHimno)
-
     if (himnoBuscado.cancion != ""){
+        formatearFavorito(himnoBuscado.favorito)
         formatearYCargarHimno(himnoBuscado)
     }else{
         Toast.makeText(this, "No existe el himno buscado", Toast.LENGTH_LONG).show()

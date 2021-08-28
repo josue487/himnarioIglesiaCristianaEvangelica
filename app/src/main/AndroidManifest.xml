@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HimnarioIglesiaCristianaEvangelica">
-        <activity android:name=".Actividades.BusquedaActivity"></activity>
+        <activity android:name=".Actividades.FavoritosActivity"></activity>
+        <activity android:name=".Actividades.BusquedaActivity" />
         <activity android:name=".Actividades.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

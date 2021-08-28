@@ -8,6 +8,20 @@
     android:background="@drawable/background"
     tools:context=".Actividades.BusquedaActivity">
 
+    <Button
+        android:id="@+id/btnAnterior"
+        android:layout_width="90dp"
+        android:layout_height="36dp"
+        android:background="#F80101"
+        android:onClick="anterior"
+        android:text="Anterior"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCancion" />
+
     <TextView
         android:id="@+id/lblTitulo"
         android:layout_width="293dp"
@@ -66,4 +80,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblTitulo" />
+
+    <Button
+        android:id="@+id/btnSiguiente"
+        android:layout_width="97dp"
+        android:layout_height="36dp"
+        android:background="#F80101"
+        android:onClick="siguiente"
+        android:text="Siguiente"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCancion" />
+
+    <ImageButton
+        android:id="@+id/btnFavorito"
+        android:layout_width="63dp"
+        android:layout_height="56dp"
+        android:adjustViewBounds="true"
+        android:background="#00020202"
+        android:onClick="btnFavorito"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSiguiente"
+        app:layout_constraintStart_toEndOf="@+id/btnAnterior"
+        app:layout_constraintTop_toBottomOf="@+id/lblCancion"
+        app:srcCompat="@android:drawable/star_big_off" />
 </androidx.constraintlayout.widget.ConstraintLayout>

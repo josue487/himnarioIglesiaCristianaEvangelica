@@ -42,4 +42,42 @@ class SQLiteHelper(
         return himnoBuscado
     }
 
+    fun buscarFavoritos () :  ArrayList<Himno>{
+        val bd : SQLiteDatabase = readableDatabase
+        val cursor : Cursor = bd.rawQuery("SELECT * FROM Himnos WHERE favorito LIKE 1", null)
+        var listaFavoritos = ArrayList<Himno>()
+        if(cursor.moveToFirst()){
+            do {
+                val himnoBuscado = Himno()
+                himnoBuscado.cancion = cursor.getString(1)
+                himnoBuscado.coro = cursor.getString(2)
+                himnoBuscado.titulo = cursor.getString(3)
+                himnoBuscado.versiculo = cursor.getString(4)
+                himnoBuscado.notas = cursor.getString(5)
+                himnoBuscado.favorito = cursor.getInt(6) == 1
+                himnoBuscado.notasCoro = cursor.getString(7)
+                himnoBuscado.id = cursor.getInt(0)
+                listaFavoritos.add(himnoBuscado)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return listaFavoritos
+    }
+
+
+
+    fun cambiarEstadoFavorito(idHimno : Int) : Boolean{
+        val bd : SQLiteDatabase = readableDatabase
+        val cursor : Cursor = bd.rawQuery("SELECT * FROM Himnos WHERE $idHimno LIKE id", null)
+        var favorito : Boolean = false
+        if(cursor.moveToFirst()){
+            favorito = cursor.getInt(6) == 1
+        }
+        cursor.close()
+        favorito=favorito.not()
+        val numeroFavorito : Int = if (favorito) 1 else 0
+        bd.execSQL("UPDATE Himnos SET favorito = $numeroFavorito WHERE $idHimno LIKE id")
+        return favorito
+    }
+
 }

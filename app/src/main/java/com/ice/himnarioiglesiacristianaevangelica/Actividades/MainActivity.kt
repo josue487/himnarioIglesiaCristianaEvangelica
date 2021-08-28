@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //Abre la actividad busqueda y manda como parametro a esa actividad el numero buscado
     fun btnBuscar(@Suppress("UNUSED_PARAMETER") v: View) {
         if (binding.txtNumeroHimno.text.isNotEmpty()) {
             val intent = Intent(this, BusquedaActivity::class.java)
@@ -34,7 +35,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Abre actividad favoritos que contiene himnos favoritos
+    fun btnFavoritos (@Suppress("UNUSED_PARAMETER") v: View){
+        val intent = Intent(this, FavoritosActivity::class.java)
+        startActivity(intent)
+    }
 
+
+    //Primera ejecucion copia una base de datos preexistente al sistema
     fun copiarBaseDatos() {
         val ruta = "/data/data/com.ice.himnarioiglesiacristianaevangelica/databases/"
         val archivo = "dbHimnosEstructuraCompleta.db"

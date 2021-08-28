@@ -27,6 +27,7 @@
         android:layout_width="234dp"
         android:layout_height="52dp"
         android:autoSizeTextType="uniform"
+        android:maxLength="3"
         android:background="#C4FFD53B"
         android:ems="10"
         android:fontFamily="sans-serif-smallcaps"
@@ -44,7 +45,8 @@
         app:layout_constraintTop_toBottomOf="@+id/lblBusqueda"
         app:layout_constraintTop_toTopOf="@+id/lblBusqueda"
         app:layout_constraintVertical_bias="0.641"
-        android:autofillHints="" />
+        tools:layout_editor_absoluteX="88dp"
+        tools:layout_editor_absoluteY="188dp" />
 
     <Button
         android:id="@+id/btnBuscar"
@@ -75,5 +77,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
         app:srcCompat="@drawable/icono_en_menu_principal" />
+
+    <Button
+        android:id="@+id/btnFavoritos"
+        android:layout_width="159dp"
+        android:layout_height="59dp"
+        android:onClick="btnFavoritos"
+        android:text="Favoritos"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.944"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
