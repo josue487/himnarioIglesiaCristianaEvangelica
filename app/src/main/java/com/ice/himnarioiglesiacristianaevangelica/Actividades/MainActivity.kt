@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         if (binding.txtNumeroHimno.text.isNotEmpty()) {
             val intent = Intent(this, BusquedaActivity::class.java)
             intent.putExtra("id",binding.txtNumeroHimno.text.toString().toInt())
+            binding.txtNumeroHimno.setText("")
             startActivity(intent)
         } else {
             Toast.makeText(this, "Debe Ingresar un himno valido", Toast.LENGTH_SHORT).show()

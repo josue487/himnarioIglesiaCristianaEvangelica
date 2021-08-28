@@ -3,6 +3,7 @@ package com.ice.himnarioiglesiacristianaevangelica.Actividades
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.ice.himnarioiglesiacristianaevangelica.ClasesBase.Himno
@@ -19,6 +20,12 @@ class FavoritosActivity : AppCompatActivity() {
 
     var listaInformacion = ArrayList<String>()
     var listaFavoritos = ArrayList<Himno>()
+
+    //Codigo para boton atras
+    fun atras(@Suppress("UNUSED_PARAMETER") v : View){
+        onBackPressed()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
