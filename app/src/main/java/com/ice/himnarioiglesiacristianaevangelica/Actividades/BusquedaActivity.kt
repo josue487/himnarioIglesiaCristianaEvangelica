@@ -82,36 +82,44 @@ class BusquedaActivity : AppCompatActivity() {
         //agregado del coro a la cancion para obtener la cancion final
         cancionFinal=cancionFinal.replace("*", coroFinal)
 
-        //ToDO evaluacion de configuraciones para determinar si quiere ver que el coro se repita o no
-        if(true){
+
+        if(false){
             //Variable situacional '+' para evaluar a futuro la posibilidad de poner el coro en distintas lineas de la cancion donde esta lo amerite
             cancionFinal = cancionFinal.replace("+", "")
         }else{
             cancionFinal = cancionFinal.replace("+", coroFinal)
         }
-        //bloque de codigo que lo que hace es:
-        //1) obtener el indice de inicio de coro para despues poner en negrita y guardarlo en una variable
-        val inicioCoro : Int = cancionFinal.indexOf("(negrita)")
-        //2) quitar el texto reservado (negrita) que identificaba el inicio del coro
-        cancionFinal=cancionFinal.replace("(negrita)", "")
-        //3) obtener el indice de final de coro para delimitar el tamaño de la negrita y guardarlo en una variable
-        val finalCoro : Int = cancionFinal.indexOf("(finNegrita)")
-        //4) quitar el texto reservado (finNegrita) que identificaba el fin del coro
-        cancionFinal=cancionFinal.replace("(finNegrita)", "")
-
-
         //Una vez formateado lo carga en la vista de acuerdo al formato aplicado
-       cargarEnLaVista(cancionFinal, inicioCoro, finalCoro, tituloFinal, himnoBuscado.versiculo)
+        cargarEnLaVista(cancionFinal, tituloFinal, himnoBuscado.versiculo)
     }
 
 
-    fun cargarEnLaVista(cancionFinal : String , inicioCoro : Int, finalCoro : Int, tituloFinal : String, versiculos : String){
-        //una vez guardadas las 2 posiciones mencionadas anteriormente se crea el objeto Spannable para asi poder aplicar negrita
-        val ss = SpannableString(cancionFinal)
+    fun cargarEnLaVista(cancionFinal : String , tituloFinal : String, versiculos : String){
+
+        var cancionFormateada = cancionFinal
+        var inicioCoro = 0
+        var finalCoro = 0
         // creacion del estilo negrita
-        val negrita = StyleSpan(Typeface.BOLD_ITALIC)
-        //formateo del texto final con el coro en negrita delimitado por inicioCoro y finalCoro
-        ss.setSpan(negrita,inicioCoro,finalCoro,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var negrita = StyleSpan(Typeface.BOLD_ITALIC)
+        //una vez guardadas las 2 posiciones mencionadas anteriormente se crea el objeto Spannable para asi poder aplicar negrita
+        val ss = SpannableString(cancionFinal.replace("(negrita)","").replace("(finNegrita)", ""))
+
+        while(cancionFormateada.indexOf("(negrita)",inicioCoro) != -1){
+            //bloque de codigo que lo que hace es:
+            //1) obtener el indice de inicio de coro para despues poner en negrita y guardarlo en una variable
+            inicioCoro = cancionFormateada.indexOf("(negrita)",inicioCoro)
+            //2) quitar el texto reservado (negrita) que identificaba el inicio del coro
+            cancionFormateada = cancionFormateada.replaceFirst("(negrita)", "")
+            //3) obtener el indice de final de coro para delimitar el tamaño de la negrita y guardarlo en una variable
+            finalCoro = cancionFormateada.indexOf("(finNegrita)",finalCoro)
+            //4) quitar el texto reservado (finNegrita) que identificaba el fin del coro
+            cancionFormateada = cancionFormateada.replaceFirst("(finNegrita)", "")
+            negrita = StyleSpan(Typeface.BOLD_ITALIC)
+            //formateo del texto final con el coro en negrita delimitado por inicioCoro y finalCoro
+            ss.setSpan(negrita,inicioCoro,finalCoro,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+
         //bindeo con la vista para mostrar titulo con el id y el titulo del himnario
         binding.lblTitulo.text=tituloFinal
         //bindeo con la vista para mostrar la cancion completa y formateada
@@ -136,17 +144,16 @@ class BusquedaActivity : AppCompatActivity() {
         formatearFavorito(servicioBD.cambiarEstadoFavorito(posicion))
     }
 
-fun cargarHimno(idHimno : Int){
+    fun cargarHimno(idHimno : Int){
 
-    posicion=idHimno
-    val himnoBuscado : Himno = servicioBD.buscarHimno(idHimno)
-    if (himnoBuscado.cancion != ""){
-        formatearFavorito(himnoBuscado.favorito)
-        formatearYCargarHimno(himnoBuscado)
-    }else{
-        Toast.makeText(this, "No existe el himno buscado", Toast.LENGTH_LONG).show()
-        onBackPressed()
+        posicion=idHimno
+        val himnoBuscado : Himno = servicioBD.buscarHimno(idHimno)
+        if (himnoBuscado.cancion != ""){
+            formatearFavorito(himnoBuscado.favorito)
+            formatearYCargarHimno(himnoBuscado)
+        }else{
+            Toast.makeText(this, "No existe el himno buscado", Toast.LENGTH_LONG).show()
+            onBackPressed()
+        }
     }
-}
-
 }
