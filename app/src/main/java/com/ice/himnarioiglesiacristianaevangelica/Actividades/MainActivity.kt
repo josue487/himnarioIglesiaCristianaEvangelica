@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.ice.himnarioiglesiacristianaevangelica.NavegacionBusquedaActivity
 import com.ice.himnarioiglesiacristianaevangelica.databinding.ActivityMainBinding
 import java.io.*
 
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         copiarBaseDatos()
 
     }
+
+
 
     //Abre la actividad busqueda y manda como parametro a esa actividad el numero buscado
     fun btnBuscar(@Suppress("UNUSED_PARAMETER") v: View) {
@@ -42,6 +45,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
+    //Abre actividad Fragment
+    fun btnFragment (@Suppress("UNUSED_PARAMETER") v: View){
+        val intent = Intent(this, NavegacionBusquedaActivity::class.java)
+        startActivity(intent)
+    }
 
     //Primera ejecucion copia una base de datos preexistente al sistema
     fun copiarBaseDatos() {

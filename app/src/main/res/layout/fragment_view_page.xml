@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".ViewPageFragment">
+
+
+    <TextView
+        android:id="@+id/lblTitulo"
+        android:layout_width="293dp"
+        android:layout_height="34dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:text="@string/titulo"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lblCancion"
+        android:layout_width="410dp"
+        android:layout_height="602dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="59dp"
+        android:background="#B0F3EDED"
+        android:scrollbars="vertical"
+        android:text="@string/canci_n"
+        android:textAlignment="center"
+        android:textSize="25sp" />
+
+
+    <TextView
+        android:id="@+id/lblVersiculos"
+        android:layout_width="364dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="@string/versiculos"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textStyle="italic" />
+
+    <ImageButton
+        android:id="@+id/btnFavorito"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/lblCancion"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="605dp"
+        android:layout_marginBottom="5dp"
+        android:adjustViewBounds="true"
+        android:background="#00020202"
+        android:foreground="@drawable/favorito_off"
+        android:onClick="botonFavoritoClick"
+        android:scaleType="fitCenter" />
+
+</RelativeLayout>
