@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -9,10 +11,10 @@ android {
 
     defaultConfig {
         applicationId "com.ice.himnarioiglesiacristianaevangelica"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 3
-        versionName "3.0"
+        versionCode 11
+        versionName "4.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,4 +51,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //Room
+    implementation 'androidx.room:room-ktx:2.2.5'
+    kapt 'androidx.room:room-compiler:2.2.5'
 }

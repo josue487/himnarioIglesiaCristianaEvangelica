@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".Actividades.MainActivity">
+    tools:context=".home.view.HomeActivity">
 
     <TextView
         android:id="@+id/lblBusqueda"
@@ -16,22 +16,21 @@
         android:layout_marginTop="81dp"
         android:text="@string/himnario_i_c_e"
         android:textAlignment="center"
-        android:textColor="#F4F1F1"
+        android:textColor="@color/text_color"
         android:textSize="35sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtNumeroHimno"
+        android:id="@+id/txtMusicNumber"
         android:layout_width="234dp"
         android:layout_height="52dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="165dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="19dp"
         android:autoSizeTextType="uniform"
         android:background="#C4FFD53B"
         android:ems="10"
@@ -43,85 +42,77 @@
         android:textColor="#FDFDFD"
         android:textStyle="italic"
         android:typeface="sans"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnBuscar"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblBusqueda"
-        app:layout_constraintTop_toTopOf="@+id/lblBusqueda"
-        app:layout_constraintVertical_bias="0.641"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="188dp" />
+        app:layout_constraintTop_toBottomOf="@+id/lblBusqueda" />
 
     <Button
-        android:id="@+id/btnBuscar"
+        android:id="@+id/btnSearch"
         android:layout_width="186dp"
         android:layout_height="59dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="235dp"
         android:background="#C9F60909"
         android:backgroundTint="#27E3FB"
         android:fontFamily="sans-serif-medium"
-        android:onClick="btnBuscar"
         android:text="@string/buscar"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:icon="@android:drawable/ic_search_category_default"
         app:iconPadding="5sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnFavorite"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.437" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNumeroHimno" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="291dp"
-        android:layout_height="271dp"
+        android:layout_height="241dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
+        app:layout_constraintTop_toBottomOf="@+id/btnFavorite"
         app:srcCompat="@drawable/icono_en_menu_principal" />
 
     <Button
-        android:id="@+id/btnFavoritos"
+        android:id="@+id/btnFavorite"
         android:layout_width="159dp"
         android:layout_height="59dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="323dp"
-        android:onClick="btnFavoritos"
         android:text="Favoritos"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.944"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnShare"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="290dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="654dp"
-        android:text="Button"
-        android:onClick="btnFragment"/>
+        android:layout_height="48dp"
+        android:layout_marginStart="274dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/btn_share"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="1.0" />
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

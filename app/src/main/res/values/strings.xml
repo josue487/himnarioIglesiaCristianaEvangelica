@@ -7,6 +7,31 @@
     <string name="ingrese_numero_de_himno">Ingrese Numero de Himno</string>
     <string name="buscar">Buscar</string>
     <string name="logo">Logo</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- Buttons text -->
+    <string name="btn_share">Compartir</string>
+
+
+
+
+    <!-- Errors text -->
+    <string name="error">ERROR</string>
+    <string name="error_empty_field">Compartir</string>
+    <string name="error_db_not_exist">No Se pudo copiar la Base de Datos, Archivo No Encontrado, Por Favor Contactese con el Fabricante</string>
+    <string name="error_file_not_found">Archivo no encontrado, </string>
+    <string name="error_copy_db">No Se pudo copiar la Base de Datos, Error en el Sistema, </string>
+    <string name="error_copy_db_log">Error al copiar la Base de Datos,  Por Favor Contactese con el Fabricante</string>
+    <string name="no_exist_music">"No existe el himno buscado"</string>
+
+
+    <!-- App text for user -->
+    <string name="enjoy_app_text">Disfrute del Himnario</string>
+    <string name="share_text_user">Te Comprato este Himnario \n https://play.google.com/store/apps/details?id=com.ice.himnarioiglesiacristianaevangelica</string>
+    <string name="first_music">Llegaste al Inicio</string>
+    <string name="last_music">Llegaste al Final</string>
+
+
+    
 </resources>

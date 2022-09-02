@@ -9,15 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HimnarioIglesiaCristianaEvangelica">
-        <activity android:name=".NavegacionBusquedaActivity"></activity>
+        <activity android:name=".search.view.NavegacionBusquedaActivity" />
         <activity
-            android:name=".Actividades.FavoritosActivity"
+            android:name=".search.view.FavoriteActivity"
+            android:parentActivityName=".home.view.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Actividades.BusquedaActivity"
+            android:name=".search.view.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Actividades.MainActivity"
+            android:name=".home.view.HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
