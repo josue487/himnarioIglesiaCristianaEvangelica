@@ -121,15 +121,15 @@ class SearchActivity : AppCompatActivity() {
         //bindeo con la vista para mostrar la cancion completa y formateada
         binding.lblSong.text=ss
         //bindeo con la vista para mostrar los versiculos basados en la creacion del himno
-        binding.lblVersiculos.text=verse
+        binding.lblVerses.text=verse
 
     }
 
     private fun formatFavorite(himnoFavorito : Boolean){
         if(himnoFavorito)
-            binding.btnFavorite.setImageResource(R.drawable.favorito_on)
+            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
         else
-            binding.btnFavorite.setImageResource(R.drawable.favorito_off)
+            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
     }
 
 
