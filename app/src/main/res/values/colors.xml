@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colir">#03DAC6</color>
 
-
+    <color name="transparent">#00FFFFFF</color>
+    <color name="primary">#FF6200EE</color>
     <color name="text_color">#FFFFFF</color>
 </resources>
