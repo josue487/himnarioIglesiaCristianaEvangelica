@@ -63,7 +63,7 @@
         android:layout_marginBottom="5dp"
         android:adjustViewBounds="true"
         android:background="#00020202"
-        android:foreground="@drawable/favorito_off"
+        android:foreground="@drawable/ic_baseline_favorite_border_24"
         android:onClick="botonFavoritoClick"
         android:scaleType="fitCenter" />
 
