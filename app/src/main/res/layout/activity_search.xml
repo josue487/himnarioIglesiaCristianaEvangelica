@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/viewBusqueda"
@@ -8,129 +9,109 @@
     android:background="@drawable/background"
     tools:context=".search.view.SearchActivity">
 
-    <Button
-        android:id="@+id/btnPrevious"
-        android:layout_width="90dp"
-        android:layout_height="36dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginBottom="12dp"
-        android:background="#F80101"
-        android:text="Anterior"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblSong" />
 
     <TextView
         android:id="@+id/lblTitle"
-        android:layout_width="293dp"
-        android:layout_height="34dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="55dp"
         android:layout_marginTop="11dp"
         android:text="@string/titulo"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_color"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/lblSong"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.633"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/lblSong"
+        android:id="@+id/lblVerses"
         android:layout_width="match_parent"
-        android:layout_height="588dp"
-        android:layout_below="@+id/lblTitle"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginTop="39dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="58dp"
-        android:background="#B0F3EDED"
-        android:scrollbars="vertical"
-        android:text="@string/canci_n"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.609" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="52dp"
-        android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/colir"
-        app:icon="@drawable/abc_vector_test"
-        app:layout_constraintBottom_toTopOf="@+id/lblSong"
-        app:layout_constraintEnd_toEndOf="@+id/lblTitle"
-        app:layout_constraintHorizontal_bias="0.051"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
-
-    <TextView
-        android:id="@+id/lblVersiculos"
-        android:layout_width="364dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="55dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/versiculos"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/lblSong"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+
+    <TextView
+        android:id="@+id/lblSong"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/lblTitle"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#B0F3EDED"
+        android:scrollbars="vertical"
+        android:text="@string/canci_n"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@id/btnFavorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/lblVerses" />
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/primary"
+        android:src="@drawable/abc_vector_test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/lblSong"/>
+
 
     <Button
         android:id="@+id/btnNext"
-        android:layout_width="97dp"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginEnd="18dp"
-        android:layout_marginBottom="12dp"
-        android:background="#F80101"
-        android:text="Siguiente"
-        android:textSize="10sp"
+        android:background="@color/primary"
+        android:text="@string/btn_next_song"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintTop_toBottomOf="@+id/lblSong" />
+
+    <Button
+        android:id="@+id/btnPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginStart="18dp"
+        android:background="@color/primary"
+        android:text="@string/btn_back_song"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblSong" />
 
+
     <ImageButton
         android:id="@+id/btnFavorite"
-        android:layout_width="63dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:adjustViewBounds="true"
-        android:background="#00020202"
+        android:background="@color/transparent"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnNext"
         app:layout_constraintStart_toEndOf="@+id/btnPrevious"
         app:layout_constraintTop_toBottomOf="@+id/lblSong"
-        app:srcCompat="@android:drawable/star_big_off" />
-</RelativeLayout>
+        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
