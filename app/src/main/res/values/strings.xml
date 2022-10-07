@@ -2,6 +2,8 @@
     <string name="app_name">Himnario Iglesia Cristiana Evangelica</string>
     <string name="titulo">Titulo</string>
     <string name="canci_n">Canción</string>
+    <string name="favourite_title">Favoritos</string>
+
     <string name="versiculos">Versiculos</string>
     <string name="himnario_i_c_e">Himnario I.C.E</string>
     <string name="ingrese_numero_de_himno">Ingrese Numero de Himno</string>
@@ -12,6 +14,10 @@
 
     <!-- Buttons text -->
     <string name="btn_share">Compartir</string>
+    <string name="btn_back_song">Anterior</string>
+    <string name="btn_next_song">Siguiente</string>
+    <string name="btn_favourite">Favoritos</string>
+
 
 
 
@@ -33,5 +39,4 @@
     <string name="last_music">Llegaste al Final</string>
 
 
-    
 </resources>
