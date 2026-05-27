@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 import '../blocs/settings/settings_bloc.dart';
+import '../config.dart';
 import '../models/himno.dart';
 import '../services/database_service.dart';
 
@@ -348,9 +349,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: () => Share.share(
-          'Te recomiendo el Himnario ICE para Android — canta junto a tu congregación con 517 himnos del Himnario Iglesia Cristiana Evangélica.',
-        ),
+        onPressed: () {
+          const msg =
+              'Te recomiendo el Himnario ICE — 517 himnos del Himnario Iglesia Cristiana Evangélica.';
+          Share.share(
+            kPlayStoreEnabled ? '$msg\n$kPlayStoreUrl' : msg,
+          );
+        },
         icon: const Icon(Icons.share_outlined),
         label: const Text('Compartir esta app'),
         style: ElevatedButton.styleFrom(
@@ -487,3 +492,4 @@ class _ColorChip extends StatelessWidget {
     );
   }
 }
+

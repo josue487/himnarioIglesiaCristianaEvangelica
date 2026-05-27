@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../blocs/search/search_bloc.dart';
+import '../config.dart';
 import '../models/himno.dart';
 import '../services/database_service.dart';
 import 'busqueda_screen.dart';
@@ -85,7 +88,7 @@ class _MainViewState extends State<_MainView> {
           Expanded(
             child: BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) => switch (state) {
-                SearchInitial() => _buildWelcome(),
+                SearchInitial() => _buildWelcome(context, hPad),
                 SearchLoading() => const Center(
                     child: Padding(
                       padding: EdgeInsets.all(32),
@@ -219,32 +222,165 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _buildWelcome() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.menu_book_rounded, size: 72, color: Colors.indigo.shade200),
-          const SizedBox(height: 20),
-          Text(
-            'Busca un himno',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey.shade700,
+  Widget _buildWelcome(BuildContext context, double hPad) {
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.menu_book_rounded, size: 72, color: Colors.indigo.shade200),
+                const SizedBox(height: 20),
+                Text(
+                  'Busca un himno',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Por número (ej. 42) o parte del título',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '517 himnos disponibles',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Por número (ej. 42) o parte del título',
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '517 himnos disponibles',
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-          ),
-        ],
+        ),
+        _buildDonationCard(context, hPad),
+      ],
+    );
+  }
+
+  void _thankYou(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Gracias por tu colaboracion. Dios te bendiga!'),
+        backgroundColor: Colors.indigo.shade700,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  Widget _buildDonationCard(BuildContext context, double hPad) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(hPad, 0, hPad, 20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.indigo.shade50,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.indigo.shade100),
+        ),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.favorite_outline, size: 15, color: Colors.indigo.shade400),
+                const SizedBox(width: 6),
+                Text(
+                  'COLABORAR',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigo.shade500,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Esta app es gratuita. Si te resulta util, podes colaborar voluntariamente.',
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600, height: 1.4),
+            ),
+            const SizedBox(height: 12),
+            // Fila Argentina
+            Row(
+              children: [
+                Icon(Icons.account_balance_outlined, size: 18, color: Colors.indigo.shade400),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Argentina',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+                      ),
+                      Text(
+                        kDonationAlias,
+                        style: TextStyle(fontSize: 12, color: Colors.indigo.shade600, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    Clipboard.setData(const ClipboardData(text: kDonationAlias));
+                    _thankYou(context);
+                  },
+                  icon: const Icon(Icons.copy_outlined, size: 15),
+                  label: const Text('Copiar', style: TextStyle(fontSize: 12)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.indigo.shade700,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 16),
+            // Fila Internacional
+            Row(
+              children: [
+                Icon(Icons.public_outlined, size: 18, color: Colors.indigo.shade400),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Internacional',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+                      ),
+                      Text(
+                        'PayPal  @josue487pp',
+                        style: TextStyle(fontSize: 12, color: Colors.indigo.shade600, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () async {
+                    await launchUrl(
+                      Uri.parse(kDonationPaypalUrl),
+                      mode: LaunchMode.externalApplication,
+                    );
+                    if (context.mounted) _thankYou(context);
+                  },
+                  icon: const Icon(Icons.open_in_new, size: 15),
+                  label: const Text('Abrir', style: TextStyle(fontSize: 12)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.indigo.shade700,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
