@@ -81,6 +81,14 @@ class _MainViewState extends State<_MainView> {
     final hPad = (w * 0.05).clamp(16.0, 32.0);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: _openDonation,
+        backgroundColor: Colors.indigo.shade600,
+        foregroundColor: Colors.indigo.shade50,
+        elevation: 2,
+        tooltip: 'Colaborar',
+        child: const Icon(Icons.favorite_border),
+      ),
       body: Column(
         children: [
           _buildHeader(topPad, hPad),
@@ -88,7 +96,7 @@ class _MainViewState extends State<_MainView> {
           Expanded(
             child: BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) => switch (state) {
-                SearchInitial() => _buildWelcome(context, hPad),
+                SearchInitial() => _buildWelcome(),
                 SearchLoading() => const Center(
                     child: Padding(
                       padding: EdgeInsets.all(32),
@@ -222,164 +230,47 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _buildWelcome(BuildContext context, double hPad) {
-    return Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.menu_book_rounded, size: 72, color: Colors.indigo.shade200),
-                const SizedBox(height: 20),
-                Text(
-                  'Busca un himno',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Por número (ej. 42) o parte del título',
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '517 himnos disponibles',
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-                ),
-              ],
+  Widget _buildWelcome() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.menu_book_rounded, size: 72, color: Colors.indigo.shade200),
+          const SizedBox(height: 20),
+          Text(
+            'Busca un himno',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700,
             ),
           ),
-        ),
-        _buildDonationCard(context, hPad),
-      ],
-    );
-  }
-
-  void _thankYou(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Gracias por tu colaboracion. Dios te bendiga!'),
-        backgroundColor: Colors.indigo.shade700,
-        duration: const Duration(seconds: 3),
+          const SizedBox(height: 8),
+          Text(
+            'Por número (ej. 42) o parte del título',
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '517 himnos disponibles',
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildDonationCard(BuildContext context, double hPad) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(hPad, 0, hPad, 20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.indigo.shade50,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.indigo.shade100),
-        ),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.favorite_outline, size: 15, color: Colors.indigo.shade400),
-                const SizedBox(width: 6),
-                Text(
-                  'COLABORAR',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo.shade500,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Esta app es gratuita. Si te resulta util, podes colaborar voluntariamente.',
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600, height: 1.4),
-            ),
-            const SizedBox(height: 12),
-            // Fila Argentina
-            Row(
-              children: [
-                Icon(Icons.account_balance_outlined, size: 18, color: Colors.indigo.shade400),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Argentina',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
-                      ),
-                      Text(
-                        kDonationAlias,
-                        style: TextStyle(fontSize: 12, color: Colors.indigo.shade600, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    Clipboard.setData(const ClipboardData(text: kDonationAlias));
-                    _thankYou(context);
-                  },
-                  icon: const Icon(Icons.copy_outlined, size: 15),
-                  label: const Text('Copiar', style: TextStyle(fontSize: 12)),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.indigo.shade700,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                ),
-              ],
-            ),
-            const Divider(height: 16),
-            // Fila Internacional
-            Row(
-              children: [
-                Icon(Icons.public_outlined, size: 18, color: Colors.indigo.shade400),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Internacional',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
-                      ),
-                      Text(
-                        'PayPal  @josue487pp',
-                        style: TextStyle(fontSize: 12, color: Colors.indigo.shade600, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-                TextButton.icon(
-                  onPressed: () async {
-                    await launchUrl(
-                      Uri.parse(kDonationPaypalUrl),
-                      mode: LaunchMode.externalApplication,
-                    );
-                    if (context.mounted) _thankYou(context);
-                  },
-                  icon: const Icon(Icons.open_in_new, size: 15),
-                  label: const Text('Abrir', style: TextStyle(fontSize: 12)),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.indigo.shade700,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                ),
-              ],
-            ),
-          ],
+  void _openDonation() {
+    final messenger = ScaffoldMessenger.of(context);
+    showDialog(
+      context: context,
+      builder: (_) => _DonationDialog(
+        onDonated: () => messenger.showSnackBar(
+          SnackBar(
+            content: const Text('Gracias por tu colaboracion. Dios te bendiga!'),
+            backgroundColor: Colors.indigo.shade700,
+            duration: const Duration(seconds: 3),
+          ),
         ),
       ),
     );
@@ -409,6 +300,170 @@ class _MainViewState extends State<_MainView> {
         himno: results[index],
         onTap: () => _openHimno(results[index].id),
       ),
+    );
+  }
+}
+
+class _DonationDialog extends StatelessWidget {
+  final VoidCallback onDonated;
+
+  const _DonationDialog({required this.onDonated});
+
+  void _copyAlias(BuildContext context) {
+    Clipboard.setData(const ClipboardData(text: kDonationAlias));
+    Navigator.pop(context);
+    onDonated();
+  }
+
+  Future<void> _openPaypal(BuildContext context) async {
+    Navigator.pop(context);
+    await launchUrl(Uri.parse(kDonationPaypalUrl), mode: LaunchMode.externalApplication);
+    onDonated();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(20, 18, 12, 14),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.indigo.shade900, Colors.indigo.shade600],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.favorite_border, color: Colors.white70, size: 18),
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'Colaborar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white70, size: 20),
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // Body
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Esta app es gratuita. Si te resulta util, podes colaborar voluntariamente.',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600, height: 1.5),
+                ),
+                const SizedBox(height: 20),
+                // Argentina
+                _DonationOption(
+                  icon: Icons.account_balance_outlined,
+                  region: 'Argentina',
+                  detail: kDonationAlias,
+                  buttonLabel: 'Copiar alias',
+                  buttonIcon: Icons.copy_outlined,
+                  onTap: () => _copyAlias(context),
+                ),
+                const Divider(height: 24),
+                // Internacional
+                _DonationOption(
+                  icon: Icons.public_outlined,
+                  region: 'Internacional',
+                  detail: '@josue487pp  (PayPal)',
+                  buttonLabel: 'Abrir PayPal',
+                  buttonIcon: Icons.open_in_new,
+                  onTap: () => _openPaypal(context),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DonationOption extends StatelessWidget {
+  final IconData icon;
+  final String region;
+  final String detail;
+  final String buttonLabel;
+  final IconData buttonIcon;
+  final VoidCallback onTap;
+
+  const _DonationOption({
+    required this.icon,
+    required this.region,
+    required this.detail,
+    required this.buttonLabel,
+    required this.buttonIcon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: Colors.indigo.shade50,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Icon(icon, size: 20, color: Colors.indigo.shade600),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                region,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+              Text(
+                detail,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.indigo.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        TextButton.icon(
+          onPressed: onTap,
+          icon: Icon(buttonIcon, size: 15),
+          label: Text(buttonLabel, style: const TextStyle(fontSize: 13)),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.indigo.shade700,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          ),
+        ),
+      ],
     );
   }
 }
