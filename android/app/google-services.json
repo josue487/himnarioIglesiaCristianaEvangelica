@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "267847544054",
+    "project_id": "himnario-ice-b3",
+    "storage_bucket": "himnario-ice-b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267847544054:android:d903cdcd67994cbcbb90d7",
+        "android_client_info": {
+          "package_name": "com.ice.himnarioiglesiacristianaevangelica"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg3lajJYCqhhJPlcOrX4HXST05mFH4WpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267847544054:android:d28ed8d7c72723c1bb90d7",
+        "android_client_info": {
+          "package_name": "com.ice.himnariolibre"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg3lajJYCqhhJPlcOrX4HXST05mFH4WpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267847544054:android:eb5ea29e7e367607bb90d7",
+        "android_client_info": {
+          "package_name": "com.josue487.himnariolibre"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg3lajJYCqhhJPlcOrX4HXST05mFH4WpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
