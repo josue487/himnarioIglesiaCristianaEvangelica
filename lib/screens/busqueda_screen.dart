@@ -17,13 +17,26 @@ List<String> _parseVerseRefs(String raw) {
   final pattern = RegExp(
     r'([1-3]?\s*[A-Za-záéíóúüñÁÉÍÓÚÜÑ][a-záéíóúüñA-ZÁÉÍÓÚÜÑ]*'
     r'(?:\s+[A-Za-záéíóúüñÁÉÍÓÚÜÑ][a-záéíóúüñA-ZÁÉÍÓÚÜÑ]*)*?)'
-    r'\s+(\d+[.:]\d+(?:\s*,\s*\d+[.:]\d+)*)',
+    r'\s+(\d+[.:]\d+(?:\s+al\s+\d+)?'
+    // comma items: chapter.verse OR multi-digit bare verse OR single-digit not followed by space+letter
+    r'(?:\s*,\s*(?:\d+[.:]\d+|\d{2,}|\d(?!\s+[A-Za-záéíóúüñÁÉÍÓÚÜÑ]))(?:\s+al\s+\d+)?)*)',
   );
   final refs = <String>[];
   for (final m in pattern.allMatches(raw)) {
     final book = m.group(1)!.trim();
-    for (final part in m.group(2)!.split(RegExp(r'\s*,\s*'))) {
-      refs.add('$book ${part.replaceAll('.', ':')}');
+    String? currentChapter;
+    for (final rawPart in m.group(2)!.split(RegExp(r'\s*,\s*'))) {
+      final part = rawPart.trim();
+      final normalized = part.replaceAll('.', ':');
+      if (normalized.contains(':')) {
+        currentChapter = normalized.split(':').first;
+        refs.add('$book $normalized');
+      } else if (currentChapter != null) {
+        // bare verse number — inherits chapter from the previous ref
+        refs.add('$book $currentChapter:$normalized');
+      } else {
+        refs.add('$book $normalized');
+      }
     }
   }
   return refs.isEmpty ? [raw] : refs;
@@ -48,11 +61,17 @@ class _BusquedaView extends StatelessWidget {
   const _BusquedaView();
 
   // /  → salto de línea
-  // *  → insertar coro
-  // +  → coro opcional (se omite, igual que en Android)
-  // (negrita)/(finNegrita) → primer par renderizado en negrita+cursiva
-  TextSpan _buildFormattedText(Himno himno) {
+  // *  → insertar coro (siempre)
+  // +  → coro opcional (solo si repeatChorus activo)
+  // (negrita)/(finNegrita) → primer par en negrita+cursiva (cuando repeatChorus=false)
+  // Cuando repeatChorus=true todos los coros se muestran en negrita.
+  TextSpan _buildFormattedText(Himno himno, {bool repeatChorus = false}) {
     final coroFinal = himno.coro.replaceAll('/', '\n');
+
+    if (repeatChorus) {
+      return _buildWithBoldChorus(himno.cancion, coroFinal);
+    }
+
     var cancion = himno.cancion.replaceAll('/', '\n');
     cancion = cancion.replaceAll('*', coroFinal);
     cancion = cancion.replaceAll('+', '');
@@ -80,6 +99,43 @@ class _BusquedaView extends StatelessWidget {
     );
   }
 
+  TextSpan _buildWithBoldChorus(String cancion, String coroFinal) {
+    final children = <InlineSpan>[];
+    final coroStyle = const TextStyle(fontWeight: FontWeight.bold);
+    final coroText = coroFinal
+        .replaceAll('(negrita)', '')
+        .replaceAll('(finNegrita)', '');
+    int pos = 0;
+
+    for (final match in RegExp(r'\*|\+').allMatches(cancion)) {
+      if (match.start > pos) {
+        final segment = cancion
+            .substring(pos, match.start)
+            .replaceAll('/', '\n')
+            .replaceAll('(negrita)', '')
+            .replaceAll('(finNegrita)', '');
+        if (segment.isNotEmpty) children.add(TextSpan(text: segment));
+      }
+      if (coroText.isNotEmpty) {
+        children.add(TextSpan(text: coroText, style: coroStyle));
+      }
+      pos = match.end;
+    }
+
+    if (pos < cancion.length) {
+      final tail = cancion
+          .substring(pos)
+          .replaceAll('/', '\n')
+          .replaceAll('(negrita)', '')
+          .replaceAll('(finNegrita)', '');
+      if (tail.isNotEmpty) children.add(TextSpan(text: tail));
+    }
+
+    return children.isEmpty
+        ? TextSpan(text: cancion.replaceAll('/', '\n'))
+        : TextSpan(children: children);
+  }
+
   void _shareHimno(Himno himno) {
     final coro = himno.coro.replaceAll('/', '\n');
     var text = himno.cancion
@@ -94,7 +150,10 @@ class _BusquedaView extends StatelessWidget {
   void _showVerseDialog(BuildContext context, String reference) {
     showDialog(
       context: context,
-      builder: (_) => _VerseDialog(reference: reference),
+      builder: (_) => BlocProvider.value(
+        value: context.read<SettingsBloc>(),
+        child: _VerseDialog(reference: reference),
+      ),
     );
   }
 
@@ -138,7 +197,7 @@ class _BusquedaView extends StatelessWidget {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Text.rich(
-                                  _buildFormattedText(himno),
+                                  _buildFormattedText(himno, repeatChorus: settings.repeatChorus),
                                   style: TextStyle(
                                     fontSize: settings.fontSize,
                                     height: 1.8,
@@ -185,7 +244,9 @@ class _BusquedaView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Himno ${himno.id}',
+                        HymnoBloc.isChorus(himno.id)
+                            ? 'Coro ${HymnoBloc.chorusLabel(himno.id)}'
+                            : 'Himno ${himno.id}',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.75),
                           fontSize: 12,
@@ -260,6 +321,13 @@ class _BusquedaView extends StatelessWidget {
 
   Widget _buildNavBar(BuildContext context, int currentId, bool enabled) {
     final bloc = context.read<HymnoBloc>();
+    final inChorus = HymnoBloc.isChorus(currentId);
+    final navLabel = enabled
+        ? (inChorus
+            ? 'Coro ${HymnoBloc.chorusLabel(currentId)} / ${HymnoBloc.chorusCount}'
+            : '$currentId / ${HymnoBloc.lastHymn}')
+        : '—';
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -280,7 +348,7 @@ class _BusquedaView extends StatelessWidget {
             children: [
               Expanded(
                 child: TextButton.icon(
-                  onPressed: enabled && currentId > 1
+                  onPressed: enabled
                       ? () => bloc.add(const HymnoIrAnterior())
                       : null,
                   icon: const Icon(Icons.chevron_left),
@@ -298,7 +366,7 @@ class _BusquedaView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  enabled ? '$currentId / 517' : '— / 517',
+                  navLabel,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.indigo.shade700,
@@ -311,7 +379,7 @@ class _BusquedaView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton.icon(
-                      onPressed: enabled && currentId < 517
+                      onPressed: enabled
                           ? () => bloc.add(const HymnoIrSiguiente())
                           : null,
                       label: const Text('Siguiente'),
@@ -344,6 +412,8 @@ class _VerseDialog extends StatefulWidget {
 class _VerseDialogState extends State<_VerseDialog> {
   List<(String, List<(int, String)>)>? _groups;
   bool _error = false;
+  late String _version = context.read<SettingsBloc>().state.bibleVersion;
+  String _copyright = '';
 
   @override
   void initState() {
@@ -351,15 +421,29 @@ class _VerseDialogState extends State<_VerseDialog> {
     _loadVerses();
   }
 
+  void _selectVersion(String id) {
+    if (id == _version) return;
+    context.read<SettingsBloc>().add(SettingsBibleVersionChanged(id));
+    setState(() => _version = id);
+    _loadVerses();
+  }
+
   Future<void> _loadVerses() async {
+    final version = _version;
     try {
       final refs = _parseVerseRefs(widget.reference);
       final service = BibleService();
       final groups = <(String, List<(int, String)>)>[];
       for (final ref in refs) {
-        groups.add((ref, await service.lookupReference(ref)));
+        groups.add((ref, await service.lookupReference(ref, version: version)));
       }
-      if (mounted) setState(() => _groups = groups);
+      final copyright = await service.copyright(version);
+      if (mounted && version == _version) {
+        setState(() {
+          _groups = groups;
+          _copyright = copyright;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _error = true);
     }
@@ -408,9 +492,10 @@ class _VerseDialogState extends State<_VerseDialog> {
               ],
             ),
           ),
+          _buildVersionBar(),
           Flexible(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
               child: _buildBody(),
             ),
           ),
@@ -419,15 +504,39 @@ class _VerseDialogState extends State<_VerseDialog> {
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'Reina-Valera 1960',
+                _copyright.isEmpty ? bibleVersionName(_version) : _copyright,
+                textAlign: TextAlign.right,
                 style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.grey.shade400,
+                  fontSize: 10,
+                  color: Colors.grey.shade500,
                   fontStyle: FontStyle.italic,
                 ),
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVersionBar() {
+    return SizedBox(
+      height: 48,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        children: [
+          for (final v in kBibleVersions)
+            Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: ChoiceChip(
+                label: Text(v.id == 'RVR1960' ? 'RVR60' : v.id),
+                tooltip: v.name,
+                selected: v.id == _version,
+                visualDensity: VisualDensity.compact,
+                onSelected: (_) => _selectVersion(v.id),
+              ),
+            ),
         ],
       ),
     );

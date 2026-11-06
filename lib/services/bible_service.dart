@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:xml/xml.dart';
 
 
   Map<int, String> bookNames = {
@@ -74,54 +73,23 @@ import 'package:xml/xml.dart';
 };
 
 
-Map<String, Map<int, Map<int, String>>> _parseBibleXml(String raw) {
-  final doc = XmlDocument.parse(raw);
-  final result = <String, Map<int, Map<int, String>>>{};
-
-  const bookTags = {'BIBLEBOOK', 'BOOK', 'B'};
-  const chapterTags = {'CHAPTER', 'C'};
-  const verseTags = {'VERS', 'VERSE', 'V'};
-
-  for (final el in doc.descendants.whereType<XmlElement>()) {
-    if (!bookTags.contains(el.name.local.toUpperCase())) continue;
-
-    // 🔥 CAMBIO CLAVE: usar number en lugar de name
-    final bookNumber = int.tryParse(_attr(el, ['number']) ?? '');
-    if (bookNumber == null) continue;
-
-    final bookName = bookNames[bookNumber] ?? 'Libro_$bookNumber';
-    final bookKey = _norm(bookName);
-
-    result[bookKey] = {};
-
-    for (final ch in el.childElements) {
-      if (!chapterTags.contains(ch.name.local.toUpperCase())) continue;
-
-      final chNum = int.tryParse(_attr(ch, ['number']) ?? '');
-      if (chNum == null) continue;
-
-      result[bookKey]![chNum] = {};
-
-      for (final v in ch.childElements) {
-        if (!verseTags.contains(v.name.local.toUpperCase())) continue;
-
-        final vNum = int.tryParse(_attr(v, ['number']) ?? '');
-        if (vNum == null) continue;
-
-        result[bookKey]![chNum]![vNum] = v.innerText.trim();
-      }
+/// Parses one book file: "#chapter" lines open a chapter, others are "verse TAB text".
+Map<int, Map<int, String>> _parseBookText(String raw) {
+  final chapters = <int, Map<int, String>>{};
+  Map<int, String>? current;
+  for (final line in raw.split('\n')) {
+    if (line.isEmpty) continue;
+    if (line.codeUnitAt(0) == 0x23) {
+      current = chapters[int.tryParse(line.substring(1).trim()) ?? -1] = {};
+      continue;
     }
+    final tab = line.indexOf('\t');
+    if (tab < 0 || current == null) continue;
+    final v = int.tryParse(line.substring(0, tab));
+    if (v == null) continue;
+    current[v] = line.substring(tab + 1).trim().replaceAll('\u017F', 's');
   }
-
-  return result;
-}
-
-String? _attr(XmlElement el, List<String> names) {
-  for (final n in names) {
-    final v = el.getAttribute(n);
-    if (v != null && v.isNotEmpty) return v;
-  }
-  return null;
+  return chapters;
 }
 
 String _norm(String s) => s
@@ -203,37 +171,80 @@ const _aliases = <String, String>{
   'ap': 'apocalipsis', 'apo': 'apocalipsis', 'rev': 'apocalipsis',
 };
 
+class BibleVersion {
+  final String id;
+  final String name;
+  const BibleVersion(this.id, this.name);
+}
+
+const kBibleVersions = [
+  BibleVersion('RVR1960', 'Reina-Valera 1960'),
+  BibleVersion('NVI', 'Nueva Versión Internacional'),
+  BibleVersion('NTV', 'Nueva Traducción Viviente'),
+  BibleVersion('DHH', 'Dios Habla Hoy'),
+  BibleVersion('TLA', 'Traducción en Lenguaje Actual'),
+  BibleVersion('PDT', 'Palabra de Dios para Todos'),
+  BibleVersion('BDO', 'Biblia del Oso'),
+];
+
+const kDefaultBibleVersion = 'RVR1960';
+
+String bibleVersionName(String id) => kBibleVersions
+    .firstWhere((v) => v.id == id, orElse: () => kBibleVersions.first)
+    .name;
+
 class BibleService {
   static final BibleService _instance = BibleService._();
   factory BibleService() => _instance;
   BibleService._();
 
-  Map<String, Map<int, Map<int, String>>>? _bible;
-  Future<void>? _loadFuture;
+  // "version:book" -> chapters. Only books actually read are kept in memory.
+  final _books = <String, Map<int, Map<int, String>>>{};
+  final _loading = <String, Future<Map<int, Map<int, String>>>>{};
+  final _copyright = <String, String>{};
+  late final Map<String, int> _bookNumbers = {
+    for (final e in bookNames.entries) _norm(e.value): e.key,
+  };
 
-
-  Future<void> _ensureLoaded() {
-    _loadFuture ??= _load();
-    return _loadFuture!;
+  Future<Map<int, Map<int, String>>> _loadBook(String version, int book) {
+    final key = '$version:$book';
+    final cached = _books[key];
+    if (cached != null) return Future.value(cached);
+    return _loading[key] ??= () async {
+      try {
+        final raw = await rootBundle.loadString('assets/bible/$version/$book.txt');
+        final parsed = await compute(_parseBookText, raw);
+        _books[key] = parsed;
+        return parsed;
+      } finally {
+        _loading.remove(key);
+      }
+    }();
   }
 
-  
-
-  Future<void> _load() async {
-    final raw = await rootBundle.loadString('assets/SpanishRVR1960Bible.xml');
-    _bible = await compute(_parseBibleXml, raw);
+  Future<String> copyright(String version) async {
+    final cached = _copyright[version];
+    if (cached != null) return cached;
+    try {
+      final t = (await rootBundle.loadString('assets/bible/$version/meta.txt')).trim();
+      return _copyright[version] = t;
+    } catch (_) {
+      return '';
+    }
   }
 
-  /// Returns [(verseNumber, text)] for the given reference (e.g. "Juan 3:16" or "Salmos 23:1-4").
-  Future<List<(int, String)>> lookupReference(String reference) async {
-    await _ensureLoaded();
+  /// Returns [(verseNumber, text)] for a reference (e.g. "Juan 3:16", "Salmos 23:1-4").
+  Future<List<(int, String)>> lookupReference(
+    String reference, {
+    String version = kDefaultBibleVersion,
+  }) async {
     final ref = _parseRef(reference.trim());
-    if (ref == null || _bible == null) return [];
+    if (ref == null) return [];
 
-    final book = _findBook(_norm(ref.$1));
-    if (book == null) return [];
+    final bookNum = _findBookNumber(_norm(ref.$1));
+    if (bookNum == null) return [];
 
-    final chapter = book[ref.$2];
+    final chapter = (await _loadBook(version, bookNum))[ref.$2];
     if (chapter == null) return [];
 
     final end = ref.$4 ?? ref.$3;
@@ -246,8 +257,9 @@ class BibleService {
   }
 
   // Returns (bookName, chapter, verseStart, verseEnd?)
+  // Handles "Juan 3:16", "Salmos 23:1-4", and "Marcos 8:7 al 9"
   (String, int, int, int?)? _parseRef(String s) {
-    final m = RegExp(r'^(.+?)\s+(\d+):(\d+)(?:-(\d+))?').firstMatch(s);
+    final m = RegExp(r'^(.+?)\s+(\d+):(\d+)(?:(?:\s+al\s+|-\s*)(\d+))?').firstMatch(s);
     if (m == null) return null;
     return (
       m.group(1)!.trim(),
@@ -257,11 +269,10 @@ class BibleService {
     );
   }
 
-  Map<int, Map<int, String>>? _findBook(String key) {
-    if (_bible!.containsKey(key)) return _bible![key];
-    final via = _aliases[key];
-    if (via != null && _bible!.containsKey(via)) return _bible![via];
-    for (final entry in _bible!.entries) {
+  int? _findBookNumber(String key) {
+    final direct = _bookNumbers[key] ?? _bookNumbers[_aliases[key]];
+    if (direct != null) return direct;
+    for (final entry in _bookNumbers.entries) {
       if (entry.key.startsWith(key) || key.startsWith(entry.key)) return entry.value;
     }
     return null;

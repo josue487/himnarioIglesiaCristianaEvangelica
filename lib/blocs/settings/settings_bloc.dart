@@ -13,6 +13,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsFontSizeChanged>(_onFontSize);
     on<SettingsTextColorChanged>(_onTextColor);
     on<SettingsBgColorChanged>(_onBgColor);
+    on<SettingsRepeatChorusChanged>(_onRepeatChorus);
+    on<SettingsBibleVersionChanged>(_onBibleVersion);
     on<SettingsReset>(_onReset);
   }
 
@@ -43,11 +45,29 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     await _service.save(next);
   }
 
+  Future<void> _onRepeatChorus(
+    SettingsRepeatChorusChanged e,
+    Emitter<SettingsState> emit,
+  ) async {
+    final next = state.copyWith(repeatChorus: e.value);
+    emit(next);
+    await _service.save(next);
+  }
+
+  Future<void> _onBibleVersion(
+    SettingsBibleVersionChanged e,
+    Emitter<SettingsState> emit,
+  ) async {
+    final next = state.copyWith(bibleVersion: e.version);
+    emit(next);
+    await _service.save(next);
+  }
+
   Future<void> _onReset(
     SettingsReset e,
     Emitter<SettingsState> emit,
   ) async {
-    const next = SettingsState();
+    final next = SettingsState(bibleVersion: state.bibleVersion);
     emit(next);
     await _service.save(next);
   }

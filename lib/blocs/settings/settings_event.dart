@@ -28,6 +28,20 @@ class SettingsBgColorChanged extends SettingsEvent {
   List<Object?> get props => [color];
 }
 
+class SettingsRepeatChorusChanged extends SettingsEvent {
+  final bool value;
+  const SettingsRepeatChorusChanged(this.value);
+  @override
+  List<Object?> get props => [value];
+}
+
+class SettingsBibleVersionChanged extends SettingsEvent {
+  final String version;
+  const SettingsBibleVersionChanged(this.version);
+  @override
+  List<Object?> get props => [version];
+}
+
 class SettingsReset extends SettingsEvent {
   const SettingsReset();
 }

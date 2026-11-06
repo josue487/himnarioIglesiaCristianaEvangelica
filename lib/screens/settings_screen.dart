@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import '../blocs/settings/settings_bloc.dart';
 import '../config.dart';
 import '../models/himno.dart';
+import '../services/bible_service.dart';
 import '../services/database_service.dart';
 
 // Opciones de color de texto (oscuro, legible sobre fondos claros)
@@ -44,11 +45,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  String _previewText(Himno himno) {
+  String _previewText(Himno himno, {bool repeatChorus = false}) {
     final coro = himno.coro.replaceAll('/', '\n');
     var text = himno.cancion.replaceAll('/', '\n');
     text = text.replaceAll('*', coro);
-    text = text.replaceAll('+', '');
+    text = text.replaceAll('+', repeatChorus ? coro : '');
     text = text.replaceAll('(negrita)', '');
     text = text.replaceAll('(finNegrita)', '');
     return text.trim();
@@ -79,6 +80,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _buildTextColorCard(context, settings),
                       const SizedBox(height: 16),
                       _buildBgColorCard(context, settings),
+                      const SizedBox(height: 16),
+                      _buildRepeatChorusCard(context, settings),
+                      const SizedBox(height: 16),
+                      _buildBibleVersionCard(context, settings),
                       const SizedBox(height: 24),
                       _buildResetButton(context),
                       const SizedBox(height: 12),
@@ -200,7 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         )
                       : Text(
-                          _previewText(_himno15!),
+                          _previewText(_himno15!, repeatChorus: settings.repeatChorus),
                           style: TextStyle(
                             fontSize: settings.fontSize,
                             color: settings.textColor,
@@ -339,6 +344,74 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 hasBorder: true,
               );
             }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRepeatChorusCard(BuildContext context, SettingsState settings) {
+    return _SectionCard(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _sectionLabel('Repetir coro'),
+                const SizedBox(height: 4),
+                Text(
+                  'Repite el coro despues de cada estrofa',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: settings.repeatChorus,
+            onChanged: (v) => context
+                .read<SettingsBloc>()
+                .add(SettingsRepeatChorusChanged(v)),
+            activeThumbColor: Colors.indigo.shade600,
+            activeTrackColor: Colors.indigo.shade200,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBibleVersionCard(BuildContext context, SettingsState settings) {
+    return _SectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionLabel('Versión de la Biblia'),
+          const SizedBox(height: 4),
+          Text(
+            'Se usa al tocar el versículo de un himno',
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+          ),
+          const SizedBox(height: 8),
+          RadioGroup<String>(
+            groupValue: settings.bibleVersion,
+            onChanged: (v) {
+              if (v != null) {
+                context.read<SettingsBloc>().add(SettingsBibleVersionChanged(v));
+              }
+            },
+            child: Column(
+              children: [
+                for (final v in kBibleVersions)
+                  RadioListTile<String>(
+                    value: v.id,
+                    title: Text(v.name, style: const TextStyle(fontSize: 14)),
+                    subtitle: Text(v.id, style: const TextStyle(fontSize: 11)),
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: Colors.indigo.shade600,
+                  ),
+              ],
+            ),
           ),
         ],
       ),

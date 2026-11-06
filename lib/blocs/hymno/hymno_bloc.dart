@@ -10,6 +10,19 @@ class HymnoBloc extends Bloc<HymnoEvent, HymnoState> {
   final DatabaseService _db;
   int _currentId = 0;
 
+  static const int firstHymn = 1;
+  static const int lastHymn = 517;
+  static const int firstChorus = 601;
+  static const int lastChorus = 649;
+  static int get chorusCount => lastChorus - firstChorus + 1;
+
+  static bool isHymn(int id) => id >= firstHymn && id <= lastHymn;
+  static bool isChorus(int id) => id >= firstChorus && id <= lastChorus;
+
+  // Returns 1-based relative index for chorus display (601 → 1, 649 → 49).
+  static int chorusIndex(int id) => id - firstChorus + 1;
+  static String chorusLabel(int id) => chorusIndex(id).toString().padLeft(2, '0');
+
   HymnoBloc(this._db) : super(const HymnoInitial()) {
     on<HymnoCargar>(_onCargar);
     on<HymnoIrAnterior>(_onAnterior);
@@ -27,14 +40,30 @@ class HymnoBloc extends Bloc<HymnoEvent, HymnoState> {
     HymnoIrAnterior event,
     Emitter<HymnoState> emit,
   ) async {
-    if (_currentId > 1) await _cargarDesdeId(_currentId - 1, emit);
+    final int prev;
+    if (_currentId <= firstHymn) {
+      prev = lastChorus; // himno 1 → coro 649 (circular)
+    } else if (_currentId == firstChorus) {
+      prev = lastHymn; // coro 601 → himno 517
+    } else {
+      prev = _currentId - 1;
+    }
+    await _cargarDesdeId(prev, emit);
   }
 
   Future<void> _onSiguiente(
     HymnoIrSiguiente event,
     Emitter<HymnoState> emit,
   ) async {
-    if (_currentId < 517) await _cargarDesdeId(_currentId + 1, emit);
+    final int next;
+    if (_currentId == lastHymn) {
+      next = firstChorus;
+    } else if (_currentId == lastChorus) {
+      next = firstHymn;
+    } else {
+      next = _currentId + 1;
+    }
+    await _cargarDesdeId(next, emit);
   }
 
   Future<void> _onToggleFavorito(
